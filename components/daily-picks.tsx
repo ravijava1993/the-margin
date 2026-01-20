@@ -49,15 +49,48 @@ export function DailyPicks() {
 
     setSavingId(rec.id)
 
-    addArticle({
-      title: rec.article_title,
-      url: rec.article_url,
-      author: rec.article_author || undefined,
-      source: (rec.article_source as "linkedin" | "substack" | "x" | "medium" | "youtube" | "other") || "other",
-      excerpt: rec.article_excerpt || undefined,
-      image: rec.article_image || undefined,
-      tags: ["daily-picks"],
-    })
+    try {
+      // Fetch full article content so users can highlight and create flashcards
+      const response = await fetch("/api/fetch-content", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: rec.article_url }),
+      })
+
+      let content = ""
+      let readingTime = 5
+
+      if (response.ok) {
+        const data = await response.json()
+        content = data.content || ""
+        // Calculate reading time (average 200 words per minute)
+        const wordCount = content.split(/\s+/).length
+        readingTime = Math.max(1, Math.ceil(wordCount / 200))
+      }
+
+      addArticle({
+        title: rec.article_title,
+        url: rec.article_url,
+        author: rec.article_author || undefined,
+        source: (rec.article_source as "linkedin" | "substack" | "x" | "medium" | "youtube" | "other") || "other",
+        excerpt: rec.article_excerpt || undefined,
+        image: rec.article_image || undefined,
+        content: content,
+        readingTime: readingTime,
+        tags: ["daily-picks"],
+      })
+    } catch (error) {
+      // Fallback: save without content
+      addArticle({
+        title: rec.article_title,
+        url: rec.article_url,
+        author: rec.article_author || undefined,
+        source: (rec.article_source as "linkedin" | "substack" | "x" | "medium" | "youtube" | "other") || "other",
+        excerpt: rec.article_excerpt || undefined,
+        image: rec.article_image || undefined,
+        tags: ["daily-picks"],
+      })
+    }
 
     setSavingId(null)
   }
@@ -152,10 +185,13 @@ export function DailyPicks() {
                     variant={saved ? "outline" : "default"}
                     disabled={saved || savingId === rec.id}
                     onClick={() => saveToLibrary(rec)}
-                    className={`w-full text-xs h-8 ${saved ? "border-green-500/30 text-green-400" : "bg-violet-600 hover:bg-violet-700"}`}
+                    className={`w-full text-xs h-8 ${saved ? "border-green-500/30 text-green-400 bg-transparent" : "bg-violet-600 hover:bg-violet-700"}`}
                   >
                     {savingId === rec.id ? (
-                      <Loader2 className="w-3 h-3 animate-spin mr-1" />
+                      <>
+                        <Loader2 className="w-3 h-3 animate-spin mr-1" />
+                        Fetching article...
+                      </>
                     ) : saved ? (
                       "Saved to Library"
                     ) : (
