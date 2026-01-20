@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Margin Clipper</title>
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-8px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    
+    @keyframes checkmark {
+      0% { transform: scale(0); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      width: 380px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+      background: #09090b;
+      color: #fafafa;
+      overflow-x: hidden;
+    }
+    
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #18181b 0%, #09090b 100%);
+      border-bottom: 1px solid #27272a;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .logo-wrapper {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .logo-wrapper:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+    }
+    
+    .logo-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .header-text h1 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #fafafa;
+      letter-spacing: -0.3px;
+    }
+    
+    .header-text span {
+      font-size: 11px;
+      color: #71717a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .version-badge {
+      font-size: 10px;
+      padding: 3px 8px;
+      background: #27272a;
+      color: #a1a1aa;
+      border-radius: 12px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Content */
+    .content {
+      padding: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    /* Status */
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      background: #18181b;
+      border: 1px solid #27272a;
+      color: #a1a1aa;
+      transition: all 0.3s ease;
+    }
+    
+    .status-icon {
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    
+    .status.loading .status-icon {
+      animation: pulse 1.5s infinite;
+    }
+    
+    .status.success {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
+      border-color: rgba(34, 197, 94, 0.3);
+      color: #4ade80;
+    }
+    
+    .status.success .status-icon svg {
+      animation: checkmark 0.3s ease;
+    }
+    
+    .status.error {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+      border-color: rgba(239, 68, 68, 0.3);
+      color: #f87171;
+    }
+    
+    /* Source Badge with Logos */
+    .source-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 16px;
+      animation: slideIn 0.3s ease;
+      animation-delay: 0.1s;
+      animation-fill-mode: backwards;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .source-badge:hover {
+      transform: translateY(-1px);
+    }
+    
+    .source-badge svg {
+      width: 16px;
+      height: 16px;
+    }
+    
+    .source-linkedin { 
+      background: linear-gradient(135deg, #1e3a5f 0%, #0f2540 100%);
+      color: #60a5fa;
+      border: 1px solid rgba(96, 165, 250, 0.2);
+    }
+    
+    .source-substack { 
+      background: linear-gradient(135deg, #4c1d1d 0%, #2d1111 100%);
+      color: #ff6719;
+      border: 1px solid rgba(255, 103, 25, 0.2);
+    }
+    
+    .source-x { 
+      background: linear-gradient(135deg, #27272a 0%, #18181b 100%);
+      color: #fafafa;
+      border: 1px solid #3f3f46;
+    }
+    
+    .source-medium { 
+      background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+      color: #fafafa;
+      border: 1px solid #3f3f46;
+    }
+    
+    .source-other { 
+      background: linear-gradient(135deg, #27272a 0%, #18181b 100%);
+      color: #a1a1aa;
+      border: 1px solid #3f3f46;
+    }
+    
+    /* Form */
+    #clip-form {
+      display: none;
+    }
+    
+    .form-group {
+      margin-bottom: 16px;
+      animation: fadeIn 0.3s ease;
+      animation-fill-mode: backwards;
+    }
+    
+    .form-group:nth-child(1) { animation-delay: 0.1s; }
+    .form-group:nth-child(2) { animation-delay: 0.15s; }
+    .form-group:nth-child(3) { animation-delay: 0.2s; }
+    .form-group:nth-child(4) { animation-delay: 0.25s; }
+    
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: #71717a;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    input, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #27272a;
+      border-radius: 10px;
+      font-size: 14px;
+      background: #18181b;
+      color: #fafafa;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    
+    input:hover, textarea:hover {
+      border-color: #3f3f46;
+    }
+    
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #8b5cf6;
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+      background: #1f1f23;
+    }
+    
+    input::placeholder, textarea::placeholder {
+      color: #52525b;
+    }
+    
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+      line-height: 1.5;
+    }
+    
+    /* Settings Section */
+    .settings-section {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #27272a;
+      animation: fadeIn 0.3s ease;
+      animation-delay: 0.3s;
+      animation-fill-mode: backwards;
+    }
+    
+    .settings-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      color: #71717a;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
+    
+    .settings-header svg {
+      width: 14px;
+      height: 14px;
+    }
+    
+    .settings-section .form-group {
+      margin-bottom: 12px;
+    }
+    
+    .settings-section input {
+      font-size: 13px;
+      padding: 10px 12px;
+    }
+    
+    /* Actions */
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #27272a;
+      animation: fadeIn 0.3s ease;
+      animation-delay: 0.35s;
+      animation-fill-mode: backwards;
+    }
+    
+    button.primary {
+      flex: 1;
+      padding: 14px 20px;
+      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    button.primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+    
+    button.primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
+    }
+    
+    button.primary:hover::before {
+      left: 100%;
+    }
+    
+    button.primary:active {
+      transform: translateY(0);
+    }
+    
+    button.primary:disabled {
+      background: #3f3f46;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    button.primary:disabled::before {
+      display: none;
+    }
+    
+    /* Content Preview Card */
+    .preview-card {
+      background: #18181b;
+      border: 1px solid #27272a;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 16px;
+      animation: fadeIn 0.3s ease;
+      animation-delay: 0.05s;
+      animation-fill-mode: backwards;
+    }
+    
+    .preview-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      color: #71717a;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .preview-card-header svg {
+      width: 14px;
+      height: 14px;
+    }
+    
+    .preview-stats {
+      display: flex;
+      gap: 16px;
+    }
+    
+    .preview-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    
+    .preview-stat-value {
+      font-size: 18px;
+      font-weight: 600;
+      color: #fafafa;
+    }
+    
+    .preview-stat-label {
+      font-size: 11px;
+      color: #71717a;
+    }
+    
+    /* Footer */
+    .footer {
+      padding: 12px 20px;
+      background: #18181b;
+      border-top: 1px solid #27272a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: #52525b;
+      font-size: 11px;
+    }
+    
+    .footer a {
+      color: #8b5cf6;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    
+    .footer a:hover {
+      color: #a78bfa;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-left">
+      <div class="logo-wrapper">
+        <img src="/images/image.png" alt="The Margin">
+      </div>
+      <div class="header-text">
+        <h1>The Margin</h1>
+        <span>Clipper</span>
+      </div>
+    </div>
+    <span class="version-badge">v1.0</span>
+  </div>
+  
+  <div class="content">
+    <div id="status" class="status loading">
+      <span class="status-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 6v6l4 2"/>
+        </svg>
+      </span>
+      <span id="status-text">Extracting article data...</span>
+    </div>
+    
+    <span id="source" class="source-badge source-other">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+      </svg>
+      <span id="source-name">Web</span>
+    </span>
+    
+    <form id="clip-form">
+      <div id="preview-card" class="preview-card" style="display: none;">
+        <div class="preview-card-header">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+          </svg>
+          Content Captured
+        </div>
+        <div class="preview-stats">
+          <div class="preview-stat">
+            <span id="word-count" class="preview-stat-value">0</span>
+            <span class="preview-stat-label">Words</span>
+          </div>
+          <div class="preview-stat">
+            <span id="image-count" class="preview-stat-value">0</span>
+            <span class="preview-stat-label">Images</span>
+          </div>
+          <div class="preview-stat">
+            <span id="read-time" class="preview-stat-value">0</span>
+            <span class="preview-stat-label">Min Read</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" id="title" placeholder="Article title">
+      </div>
+      
+      <div class="form-group">
+        <label for="author">Author</label>
+        <input type="text" id="author" placeholder="Author name">
+      </div>
+      
+      <div class="form-group">
+        <label for="excerpt">Excerpt</label>
+        <textarea id="excerpt" placeholder="Brief description of the article"></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="tags">Tags (comma separated)</label>
+        <input type="text" id="tags" placeholder="reading, design, technology">
+      </div>
+      
+      <div class="settings-section">
+        <div class="settings-header">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          Connection Settings
+        </div>
+        <div class="form-group">
+          <label for="dashboard-url">Dashboard URL</label>
+          <input type="url" id="dashboard-url" placeholder="https://your-app.vercel.app">
+        </div>
+        <div class="form-group">
+          <label for="claim-code">Claim Code (from dashboard)</label>
+          <input type="text" id="claim-code" placeholder="ABC123" style="text-transform: uppercase;">
+        </div>
+      </div>
+      
+      <div class="actions">
+        <button type="button" id="save-btn" class="primary">
+          Save to The Margin
+        </button>
+      </div>
+    </form>
+  </div>
+  
+  <div class="footer">
+    <span>Slow reading, deep thinking</span>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
