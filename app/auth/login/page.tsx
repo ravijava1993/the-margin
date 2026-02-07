@@ -22,11 +22,13 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    const supabase = createClient()
     setIsLoading(true)
     setError(null)
 
     try {
+      const supabase = createClient()
+      console.log("[v0] Supabase URL:", process.env.NEXT_PUBLIC_SUPABASE_URL)
+      console.log("[v0] Supabase Anon Key exists:", !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -35,7 +37,8 @@ export default function LoginPage() {
       router.push("/")
       router.refresh()
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred")
+      console.log("[v0] Login error:", error)
+      setError(error instanceof Error ? error.message : "An error occurred during sign in. Please try again.")
     } finally {
       setIsLoading(false)
     }
