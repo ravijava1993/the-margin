@@ -408,13 +408,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     loginBtn.innerHTML = '<span class="login-spinner"></span>Signing in...'
 
     try {
-      const response = await fetch(dashboardUrl.replace(/\/$/, "") + "/api/extension/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      })
+      const apiUrl = dashboardUrl.replace(/\/$/, "") + "/api/extension/login"
+      let response
+      try {
+        response = await fetch(apiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        })
+      } catch (networkErr) {
+        throw new Error("Could not reach server. Check your dashboard URL and try again.")
+      }
 
-      const data = await response.json()
+      const text = await response.text()
+      let data
+      try {
+        data = JSON.parse(text)
+      } catch {
+        throw new Error("Server returned an invalid response. Make sure your dashboard URL is correct and the app is deployed.")
+      }
 
       if (!response.ok) {
         throw new Error(data.error || "Login failed")
