@@ -20,15 +20,15 @@
       50% { opacity: 0.5; }
     }
     
-    @keyframes shimmer {
-      0% { background-position: -200% 0; }
-      100% { background-position: 200% 0; }
-    }
-    
     @keyframes checkmark {
       0% { transform: scale(0); }
       50% { transform: scale(1.2); }
       100% { transform: scale(1); }
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
     
     * {
@@ -110,20 +110,227 @@
       letter-spacing: 0.5px;
     }
     
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+    
     .version-badge {
       font-size: 10px;
       padding: 3px 8px;
       background: #27272a;
       color: #a1a1aa;
       border-radius: 12px;
-      position: relative;
-      z-index: 1;
+    }
+
+    /* User pill in header */
+    .user-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px 4px 6px;
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px solid rgba(139, 92, 246, 0.25);
+      border-radius: 20px;
+      font-size: 11px;
+      color: #c4b5fd;
+      cursor: default;
+    }
+
+    .user-avatar {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .logout-btn {
+      background: none;
+      border: none;
+      color: #71717a;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .logout-btn:hover {
+      color: #f87171;
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    .logout-btn svg {
+      width: 16px;
+      height: 16px;
     }
     
     /* Content */
     .content {
       padding: 20px;
       animation: fadeIn 0.3s ease;
+    }
+
+    /* ====== LOGIN VIEW ====== */
+    #login-view {
+      display: none;
+    }
+
+    .login-hero {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .login-hero h2 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #fafafa;
+      margin-bottom: 6px;
+    }
+
+    .login-hero p {
+      font-size: 13px;
+      color: #71717a;
+    }
+
+    .login-form .form-group {
+      margin-bottom: 14px;
+    }
+
+    .login-form label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: #71717a;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .login-form input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #27272a;
+      border-radius: 10px;
+      font-size: 14px;
+      background: #18181b;
+      color: #fafafa;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .login-form input:hover {
+      border-color: #3f3f46;
+    }
+
+    .login-form input:focus {
+      outline: none;
+      border-color: #8b5cf6;
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+      background: #1f1f23;
+    }
+
+    .login-form input::placeholder {
+      color: #52525b;
+    }
+
+    .login-error {
+      display: none;
+      padding: 10px 14px;
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 10px;
+      font-size: 13px;
+      color: #f87171;
+      margin-bottom: 14px;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px 20px;
+      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
+    }
+
+    .login-btn:active {
+      transform: translateY(0);
+    }
+
+    .login-btn:disabled {
+      background: #3f3f46;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .login-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    .login-footer {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 12px;
+      color: #52525b;
+    }
+
+    .login-footer a {
+      color: #8b5cf6;
+      text-decoration: none;
+    }
+
+    .login-footer a:hover {
+      color: #a78bfa;
+    }
+
+    /* Dashboard URL setting for login */
+    .dashboard-setting {
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #27272a;
+    }
+
+    .dashboard-setting .helper-text {
+      font-size: 11px;
+      color: #52525b;
+      margin-top: 6px;
+    }
+
+    /* ====== CLIPPER VIEW ====== */
+    #clipper-view {
+      display: none;
     }
     
     /* Status */
@@ -284,42 +491,6 @@
       line-height: 1.5;
     }
     
-    /* Settings Section */
-    .settings-section {
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 1px solid #27272a;
-      animation: fadeIn 0.3s ease;
-      animation-delay: 0.3s;
-      animation-fill-mode: backwards;
-    }
-    
-    .settings-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 14px;
-      color: #71717a;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-weight: 600;
-    }
-    
-    .settings-header svg {
-      width: 14px;
-      height: 14px;
-    }
-    
-    .settings-section .form-group {
-      margin-bottom: 12px;
-    }
-    
-    .settings-section input {
-      font-size: 13px;
-      padding: 10px 12px;
-    }
-    
     /* Actions */
     .actions {
       display: flex;
@@ -431,6 +602,43 @@
       font-size: 11px;
       color: #71717a;
     }
+
+    /* Saved confirmation banner */
+    .saved-banner {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 14px;
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(34, 197, 94, 0.04) 100%);
+      border: 1px solid rgba(34, 197, 94, 0.25);
+      border-radius: 12px;
+      margin-bottom: 16px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .saved-banner svg {
+      width: 20px;
+      height: 20px;
+      color: #4ade80;
+      flex-shrink: 0;
+    }
+
+    .saved-banner-text {
+      flex: 1;
+    }
+
+    .saved-banner-text strong {
+      display: block;
+      font-size: 13px;
+      color: #4ade80;
+      margin-bottom: 2px;
+    }
+
+    .saved-banner-text span {
+      font-size: 11px;
+      color: #86efac;
+      opacity: 0.8;
+    }
     
     /* Footer */
     .footer {
@@ -467,99 +675,146 @@
         <span>Clipper</span>
       </div>
     </div>
-    <span class="version-badge">v1.0</span>
+    <div class="header-right">
+      <div id="user-pill" class="user-pill" style="display: none;">
+        <div id="user-avatar" class="user-avatar">U</div>
+        <span id="user-name">User</span>
+      </div>
+      <button id="logout-btn" class="logout-btn" title="Sign out" style="display: none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+      </button>
+      <span class="version-badge">v2.0</span>
+    </div>
   </div>
   
   <div class="content">
-    <div id="status" class="status loading">
-      <span class="status-icon">
+
+    <!-- LOGIN VIEW -->
+    <div id="login-view">
+      <div class="login-hero">
+        <h2>Sign in to The Margin</h2>
+        <p>Use your account to clip articles directly to your library</p>
+      </div>
+
+      <form id="login-form" class="login-form">
+        <div class="dashboard-setting">
+          <div class="form-group">
+            <label for="login-dashboard-url">Dashboard URL</label>
+            <input type="url" id="login-dashboard-url" placeholder="https://your-app.vercel.app">
+          </div>
+          <div class="helper-text">The URL of your Margin dashboard</div>
+        </div>
+
+        <div id="login-error" class="login-error"></div>
+
+        <div class="form-group">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" placeholder="you@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="Your password" required>
+        </div>
+
+        <button type="submit" id="login-btn" class="login-btn">Sign In</button>
+      </form>
+
+      <div class="login-footer">
+        Don't have an account? <a href="#" id="signup-link">Sign up on the web</a>
+      </div>
+    </div>
+
+    <!-- CLIPPER VIEW (shown when logged in) -->
+    <div id="clipper-view">
+      <div id="saved-banner" class="saved-banner">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+        <div class="saved-banner-text">
+          <strong>Saved to your library</strong>
+          <span>Article is ready in your dashboard</span>
+        </div>
+      </div>
+
+      <div id="status" class="status loading">
+        <span class="status-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+        </span>
+        <span id="status-text">Extracting article data...</span>
+      </div>
+      
+      <span id="source" class="source-badge source-other">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="10"/>
-          <path d="M12 6v6l4 2"/>
+          <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
         </svg>
+        <span id="source-name">Web</span>
       </span>
-      <span id="status-text">Extracting article data...</span>
+      
+      <form id="clip-form">
+        <div id="preview-card" class="preview-card" style="display: none;">
+          <div class="preview-card-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+            Content Captured
+          </div>
+          <div class="preview-stats">
+            <div class="preview-stat">
+              <span id="word-count" class="preview-stat-value">0</span>
+              <span class="preview-stat-label">Words</span>
+            </div>
+            <div class="preview-stat">
+              <span id="image-count" class="preview-stat-value">0</span>
+              <span class="preview-stat-label">Images</span>
+            </div>
+            <div class="preview-stat">
+              <span id="read-time" class="preview-stat-value">0</span>
+              <span class="preview-stat-label">Min Read</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input type="text" id="title" placeholder="Article title">
+        </div>
+        
+        <div class="form-group">
+          <label for="author">Author</label>
+          <input type="text" id="author" placeholder="Author name">
+        </div>
+        
+        <div class="form-group">
+          <label for="excerpt">Excerpt</label>
+          <textarea id="excerpt" placeholder="Brief description of the article"></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="tags">Tags (comma separated)</label>
+          <input type="text" id="tags" placeholder="reading, design, technology">
+        </div>
+        
+        <div class="actions">
+          <button type="button" id="save-btn" class="primary">
+            Save to The Margin
+          </button>
+        </div>
+      </form>
     </div>
-    
-    <span id="source" class="source-badge source-other">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="10"/>
-        <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-      </svg>
-      <span id="source-name">Web</span>
-    </span>
-    
-    <form id="clip-form">
-      <div id="preview-card" class="preview-card" style="display: none;">
-        <div class="preview-card-header">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-            <polyline points="14 2 14 8 20 8"/>
-            <line x1="16" y1="13" x2="8" y2="13"/>
-            <line x1="16" y1="17" x2="8" y2="17"/>
-          </svg>
-          Content Captured
-        </div>
-        <div class="preview-stats">
-          <div class="preview-stat">
-            <span id="word-count" class="preview-stat-value">0</span>
-            <span class="preview-stat-label">Words</span>
-          </div>
-          <div class="preview-stat">
-            <span id="image-count" class="preview-stat-value">0</span>
-            <span class="preview-stat-label">Images</span>
-          </div>
-          <div class="preview-stat">
-            <span id="read-time" class="preview-stat-value">0</span>
-            <span class="preview-stat-label">Min Read</span>
-          </div>
-        </div>
-      </div>
-      
-      <div class="form-group">
-        <label for="title">Title</label>
-        <input type="text" id="title" placeholder="Article title">
-      </div>
-      
-      <div class="form-group">
-        <label for="author">Author</label>
-        <input type="text" id="author" placeholder="Author name">
-      </div>
-      
-      <div class="form-group">
-        <label for="excerpt">Excerpt</label>
-        <textarea id="excerpt" placeholder="Brief description of the article"></textarea>
-      </div>
-      
-      <div class="form-group">
-        <label for="tags">Tags (comma separated)</label>
-        <input type="text" id="tags" placeholder="reading, design, technology">
-      </div>
-      
-      <div class="settings-section">
-        <div class="settings-header">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="3"/>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-          </svg>
-          Connection Settings
-        </div>
-        <div class="form-group">
-          <label for="dashboard-url">Dashboard URL</label>
-          <input type="url" id="dashboard-url" placeholder="https://your-app.vercel.app">
-        </div>
-        <div class="form-group">
-          <label for="claim-code">Claim Code (from dashboard)</label>
-          <input type="text" id="claim-code" placeholder="ABC123" style="text-transform: uppercase;">
-        </div>
-      </div>
-      
-      <div class="actions">
-        <button type="button" id="save-btn" class="primary">
-          Save to The Margin
-        </button>
-      </div>
-    </form>
+
   </div>
   
   <div class="footer">
